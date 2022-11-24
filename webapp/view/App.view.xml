@@ -1,4 +1,5 @@
 <mvc:View
+	controllerName="task.order.management.controller.App"
 	displayBlock="true"
 	height="100%"
 	xmlns="sap.f"
@@ -14,5 +15,11 @@
 				viewName="task.order.management.view.Master"
 			/>
 		</beginColumnPages>
+		<midColumnPages>
+			<mvc:XMLView
+				id="detailView"
+				viewName="task.order.management.view.Detail"
+			/>
+		</midColumnPages>
 	</FlexibleColumnLayout>
 </mvc:View>
