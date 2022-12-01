@@ -25,6 +25,20 @@
         },
         "config": {
             "fullWidth": true
+        },
+        "models": {
+            "i18n": {
+                "type": "sap.ui.model.resource.ResourceModel",
+                "settings": {
+                    "bundleName": "task.order.management.i18n.i18n"
+                },
+                "supportedLocales": ["", "en"],
+                "fallbackLocale": ""
+            },
+            "countries": {
+                "type": "sap.ui.model.json.JSONModel",
+                "uri": "data/countries.json"
+            }
         }
     }
 }

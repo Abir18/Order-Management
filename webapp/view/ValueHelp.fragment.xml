@@ -1,0 +1,62 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>
+	<TableSelectDialog
+		noDataText="No Products Found"
+		title="Select Product"
+		confirm=".handleValueHelpClose"
+		cancel=".handleValueHelpClose"
+		showClearButton="true"
+		items="{/ProductCollection}"
+	>
+		<ColumnListItem selected="{selected}">
+			<cells>
+				<ObjectIdentifier title="{OrderId}"/>
+				<Text text="{CustomerName}"/>
+				<Text text="{Address}"/>
+				<ObjectNumber
+					number="{WeightMeasure}"
+					unit="{WeightUnit}"
+				/>
+				<ObjectNumber
+					number="{
+						parts: [{
+							path: 'Price'
+						}, {
+							path: 'CurrencyCode'
+						}],
+						type: 'sap.ui.model.type.Currency',
+						formatOptions: {
+							showMeasure: false
+						}
+					}"
+					unit="{CurrencyCode}"
+				/>
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column width="12em">
+				<header>
+					<Text text="Order No."/>
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true"
+			>
+				<header>
+					<Text text="Customer Name"/>
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+			>
+				<header>
+					<Text text="Address"/>
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>

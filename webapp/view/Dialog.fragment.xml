@@ -1,0 +1,90 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core"
+>
+	<TableSelectDialog
+		id="myDialog"
+		noDataText="No Products Found"
+		title="Select Product"
+		confirm=".handleClose"
+		cancel=".handleClose"
+		items="{
+			path: 'products>/ProductCollection',
+			sorter: {
+				path: 'Name',
+				descending: false
+			}
+		}"
+	>
+		<ColumnListItem vAlign="Middle">
+			<cells>
+				<ObjectIdentifier
+					title="{products>OrderId}"
+					text="{products>OrderId}"
+				/>
+				<Text text="{products>CustomerName}"/>
+				<Text text="{products>Address}"/>
+				<ObjectNumber
+					number="{WeightMeasure}"
+					unit="{WeightUnit}"
+					state="{
+						path: 'WeightMeasure',
+						formatter: 'sap.m.sample.TableSelectDialog.Formatter.weightState'
+					}"
+				/>
+				<ObjectNumber
+					number="{
+						parts: [{
+							path: 'Price'
+						}, {
+							path: 'CurrencyCode'
+						}],
+						type: 'sap.ui.model.type.Currency',
+						formatOptions: {
+							showMeasure: false
+						}
+					}"
+					unit="{CurrencyCode}"
+				/>
+			</cells>
+		</ColumnListItem>
+		<columns>
+			<Column width="12em">
+				<header>
+					<Text text="Product"/>
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Tablet"
+				demandPopin="true"
+			>
+				<header>
+					<Text text="Supplier"/>
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="End"
+			>
+				<header>
+					<Text text="Dimes"/>
+				</header>
+			</Column>
+			<Column
+				minScreenWidth="Desktop"
+				demandPopin="true"
+				hAlign="Center"
+			>
+				<header>
+					<Text text="Weight"/>
+				</header>
+			</Column>
+			<Column hAlign="End">
+				<header>
+					<Text text="Product"/>
+				</header>
+			</Column>
+		</columns>
+	</TableSelectDialog>
+</core:FragmentDefinition>
