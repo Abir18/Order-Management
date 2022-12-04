@@ -113,7 +113,7 @@
 						<template>
 							<core:Icon
 								src="sap-icon://navigation-right-arrow"
-								press="onListItemPress"
+								press="onEditItemPress(${OrderId}, ${Delivered})"
 							/>
 						</template>
 					</Column>

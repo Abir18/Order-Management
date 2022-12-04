@@ -97,6 +97,17 @@ sap.ui.define(
                 oFCL.setLayout(fioriLibrary.LayoutType.TwoColumnsBeginExpanded);
                 // oFCL.setLayout(fioriLibrary.LayoutType.OneColumn);
             },
+
+            onEditItemPress: function (orderId, delivered) {
+                console.log(orderId, delivered);
+                if (delivered) {
+                    MessageToast.show("Order already delivered.");
+                    return;
+                }
+                var oFCL = this.oView.getParent().getParent();
+
+                oFCL.setLayout(fioriLibrary.LayoutType.TwoColumnsBeginExpanded);
+            },
             updateMultipleSelection: function (oEvent) {
                 var oMultiInput = oEvent.getSource(),
                     sTokensPath =
