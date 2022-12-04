@@ -6,7 +6,13 @@ sap.ui.define(
         "sap/ui/model/Sorter",
         "sap/m/MessageBox",
         "sap/ui/model/json/JSONModel",
-        "sap/f/library"
+        "sap/f/library",
+        "sap/m/Dialog",
+        "sap/m/Button",
+        "sap/m/List",
+        "sap/m/StandardListItem",
+        "sap/m/library",
+        "sap/m/MessageToast"
     ],
     function (
         Controller,
@@ -15,9 +21,19 @@ sap.ui.define(
         Sorter,
         MessageBox,
         JSONModel,
-        fioriLibrary
+        fioriLibrary,
+        Dialog,
+        Button,
+        List,
+        StandardListItem,
+        mobileLibrary,
+        MessageToast
     ) {
         "use strict";
+        // shortcut for sap.m.ButtonType
+        var ButtonType = mobileLibrary.ButtonType;
+        // shortcut for sap.m.DialogType
+        var DialogType = mobileLibrary.DialogType;
 
         return Controller.extend("task.order.management.controller.Master", {
             onInit: function () {
@@ -36,14 +52,6 @@ sap.ui.define(
                 // this.getView().getModel().refresh();
 
                 this.oRouter = this.getOwnerComponent().getRouter();
-
-                // let customers = new JSONModel(
-                //     sap.ui.require.toUrl("task/order/management/customers.json")
-                // );
-
-                // console.log(customers, "customers");
-
-                // this.getView().setModel(customers);
 
                 // localStorage.setItem("customers", JSON.stringify(customers));
 
@@ -88,10 +96,6 @@ sap.ui.define(
 
                 oFCL.setLayout(fioriLibrary.LayoutType.TwoColumnsBeginExpanded);
                 // oFCL.setLayout(fioriLibrary.LayoutType.OneColumn);
-
-                // this.byId("app_input_orderno").setValue(
-                //     Math.round(Math.random() * 100)
-                // );
             },
             updateMultipleSelection: function (oEvent) {
                 var oMultiInput = oEvent.getSource(),
@@ -142,6 +146,95 @@ sap.ui.define(
                 var aData = oEvent.getParameter("data");
                 MessageToast.show("Pasted Data: " + aData);
             },
+
+            onStatusChanged: function (orderId, delivered) {
+                if (delivered) return;
+
+                if (!this.oDefaultDialog) {
+                    console.log("Helllooooooo");
+
+                    this.oDefaultDialog = new Dialog({
+                        title: "Are you sure to change this status?",
+
+                        beginButton: new Button({
+                            type: ButtonType.Emphasized,
+                            text: "OK",
+                            press: function () {
+                                const localStorageData =
+                                    localStorage.getItem("LocalStorageData");
+                                const parseData = JSON.parse(localStorageData);
+                                let updatedData =
+                                    parseData.ProductCollection.filter(
+                                        (order) => {
+                                            // console.log(orderId, "orderId");
+                                            return order.OrderId == orderId;
+                                        }
+                                    ).map((data) => {
+                                        if (data.Delivered == false) {
+                                            data.Delivered = true;
+                                            console.log(
+                                                data.Delivered,
+                                                "data.Delivered"
+                                            );
+                                            return data;
+                                        }
+                                        return data;
+                                    });
+                                console.log(updatedData, "updatedData");
+                                console.log(parseData, "parseData");
+                                let mappedStatusData =
+                                    parseData.ProductCollection.map((order) => {
+                                        if (order.OrderId == orderId) {
+                                            // console.log(orderId, "in the middle");
+                                            return updatedData[0];
+                                        }
+                                        return order;
+                                    });
+
+                                let data = {
+                                    ProductCollection: mappedStatusData
+                                };
+                                console.log(data, "data");
+
+                                localStorage.setItem(
+                                    "LocalStorageData",
+                                    JSON.stringify(data)
+                                );
+
+                                const getlocalStorageData =
+                                    localStorage.getItem("LocalStorageData");
+                                const getParseData =
+                                    JSON.parse(getlocalStorageData);
+                                // console.log(getParseData, "parseData");
+                                const ProductsModel = new JSONModel(
+                                    getParseData
+                                );
+                                this.getView().setModel(ProductsModel);
+                                //==============
+                                this.oDefaultDialog.close();
+                                this.getView().getModel().refresh();
+                                var msg = "User status changed";
+                                MessageToast.show(msg);
+                            }.bind(this)
+                        }),
+                        endButton: new Button({
+                            text: "Close",
+                            press: function () {
+                                this.oDefaultDialog.close();
+                            }.bind(this)
+                        })
+                    });
+
+                    console.log(this.oDefaultDialog, "this.oDefaultDialog");
+                    // to get access to the controller's model
+                    this.getView().addDependent(this.oDefaultDialog);
+                }
+                this.getView().getModel().refresh();
+                console.log("this.oDefaultDialog");
+                console.log(this.oDefaultDialog, "this.oDefaultDialog");
+                this.oDefaultDialog.open();
+            },
+
             onDeleteButtonPressed: function (orderId) {
                 console.log(orderId, typeof orderId);
                 // console.log(oEvent.getParameters());
@@ -157,9 +250,6 @@ sap.ui.define(
                 );
 
                 let data = { ProductCollection: updatedOrderData };
-
-                console.log(updatedOrderData, "u");
-                console.log(data, "uu");
 
                 localStorage.setItem("LocalStorageData", JSON.stringify(data));
 

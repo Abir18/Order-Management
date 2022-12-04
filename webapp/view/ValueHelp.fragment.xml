@@ -8,13 +8,13 @@
 		confirm=".handleValueHelpClose"
 		cancel=".handleValueHelpClose"
 		showClearButton="true"
-		items="{/ProductCollection}"
+		items="{customers>/ProductCollection}"
 	>
 		<ColumnListItem selected="{selected}">
 			<cells>
-				<ObjectIdentifier title="{OrderId}"/>
-				<Text text="{CustomerName}"/>
-				<Text text="{Address}"/>
+				<ObjectIdentifier title="{customers>OrderId}"/>
+				<Text text="{customers>CustomerName}"/>
+				<Text text="{customers>Address}"/>
 				<ObjectNumber
 					number="{WeightMeasure}"
 					unit="{WeightUnit}"

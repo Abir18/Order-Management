@@ -35,6 +35,10 @@
                 "supportedLocales": ["", "en"],
                 "fallbackLocale": ""
             },
+            "customers": {
+                "type": "sap.ui.model.json.JSONModel",
+                "uri": "data/customers.json"
+            },
             "countries": {
                 "type": "sap.ui.model.json.JSONModel",
                 "uri": "data/countries.json"

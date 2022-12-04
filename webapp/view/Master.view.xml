@@ -86,7 +86,10 @@
 					>
 						<m:Label text="{i18n>status}"/>
 						<template>
-							<core:Icon src="{= ${Delivered} ? 'sap-icon://accept' : 'sap-icon://decline'}"/>
+							<core:Icon
+								press="onStatusChanged(${OrderId}, ${Delivered})"
+								src="{= ${Delivered} ? 'sap-icon://accept' : 'sap-icon://decline'}"
+							/>
 						</template>
 					</Column>
 					<Column

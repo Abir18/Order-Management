@@ -19,14 +19,12 @@ sap.ui.define(
                 // const ProductsModel = new JSONModel(parseData);
                 // this.getView().setModel(ProductsModel, "products");
 
-                let customers = new JSONModel(
-                    sap.ui.require.toUrl("task/order/management/customers.json")
-                );
-                // console.log(customers, "customers");
+                // let customers = new JSONModel(
+                //     sap.ui.require.toUrl("task/order/management/customers.json")
+                // );
+                // // console.log(customers, "customers");
 
-                this.getView().setModel(customers);
-
-                // console.log(this.getView().getModel());
+                // this.getView().setModel(customers);
 
                 this.byId("app_input_orderno").setValue(
                     parseInt(Date.now() + Math.random())
@@ -43,7 +41,6 @@ sap.ui.define(
 
             handleValueHelp: function () {
                 var oView = this.getView();
-                // console.log(oView, "oView");
 
                 if (!this._pValueHelpDialog) {
                     this._pValueHelpDialog = Fragment.load({
@@ -75,6 +72,7 @@ sap.ui.define(
             handleValueHelpClose: function (oEvent) {
                 var oSelectedItem = oEvent.getParameter("selectedItem"),
                     oInput = this.byId("app_input_customername");
+                console.log("oSelectedItem", oSelectedItem);
 
                 if (!oSelectedItem) {
                     oInput.resetProperty("value");
@@ -100,6 +98,8 @@ sap.ui.define(
                     .getModel("countries")
                     .getData();
 
+                console.log(countriesData, "countriesData");
+
                 const selectedCountryData = countriesData.find(
                     (country) => country.countryId === selectedCountryId
                 );
@@ -113,8 +113,6 @@ sap.ui.define(
             _dataFormat: {
                 ProductCollection: []
             },
-
-            // this.dataFormat : [],
 
             onSavePressed: function () {
                 console.log("Form SUbmitted");
@@ -156,37 +154,19 @@ sap.ui.define(
                     // Date: date
                 };
 
-                // let dataFormat = {
-                //     ProductCollection: []
-                // };
-                // dataFormat.ProductCollection.push(newCustomerData);
-
-                // let dataFormat = [];
-                // let data =
                 this._dataFormat.ProductCollection.push(newCustomerData);
-                // console.log(data, "ddd");
-                // dataFormat.push(1);
+
                 if (localStorage.getItem("LocalStorageData")) {
                     let newARR = JSON.parse(
                         localStorage.getItem("LocalStorageData")
                     );
-                    // newARR.ProductCollection.push(newCustomerData);
 
                     newARR.ProductCollection.push(newCustomerData);
-
-                    console.log("newARR", newARR);
-                    console.log("dataFormat", this._dataFormat);
 
                     localStorage.setItem(
                         "LocalStorageData",
                         JSON.stringify(newARR)
                     );
-
-                    // console.log("newARR", newARR);
-                    // localStorage.setItem(
-                    //     "LocalStorageData",
-                    //     JSON.stringify(newARR.ProductCollection)
-                    // );
                 } else {
                     localStorage.setItem(
                         "LocalStorageData",
@@ -194,11 +174,7 @@ sap.ui.define(
                     );
                     console.log("not found");
                 }
-                // console.log("dataFormat", this._dataFormat);
-                // console.log(orderId, customerName, countryName, cityName, date);
 
-                // const localStorageData = JSON.stringify(newCustomerData);
-                // localStorage.setItem();
                 this.byId("app_input_orderno").setValue("");
 
                 this.byId("app_input_orderno").setValue(
@@ -216,19 +192,6 @@ sap.ui.define(
                 console.log(parseData, "parseData");
                 const ProductsModel = new JSONModel(parseData);
                 this.getView().setModel(ProductsModel);
-
-                // if (localStorage.length > 0) {
-                //     localStorage.setItem(
-                //         "dummy",
-                //         JSON.stringify(this._dataFormat)
-                //     );
-                //     for (let i = 0; i < localStorage.length; i++) {
-                //         // console.log(localStorage.key(i));
-                //         if (localStorage.key(i) == "dummy") {
-                //             localStorage.getItem("dummy");
-                //         }
-                //     }
-                // }
             }
         });
     }
