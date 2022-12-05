@@ -247,31 +247,63 @@ sap.ui.define(
             },
 
             onDeleteButtonPressed: function (orderId) {
-                console.log(orderId, typeof orderId);
-                // console.log(oEvent.getParameters());
-                console.log("Deleted");
-
-                let allOrders = JSON.parse(
-                    localStorage.getItem("LocalStorageData")
-                );
-                // console.log(allOrders.ProductCollection);
-
-                let updatedOrderData = allOrders.ProductCollection.filter(
-                    (order) => order.OrderId !== orderId
-                );
-
-                let data = { ProductCollection: updatedOrderData };
-
-                localStorage.setItem("LocalStorageData", JSON.stringify(data));
-
                 const localStorageData =
                     localStorage.getItem("LocalStorageData");
                 const parseData = JSON.parse(localStorageData);
                 console.log(parseData, "parseData");
                 const ProductsModel = new JSONModel(parseData);
                 this.getView().setModel(ProductsModel);
+                if (!this.oDefaultDialog) {
+                    this.oDefaultDialog = new Dialog({
+                        title: "Are you sure to delete this order?",
 
-                // this.getView().getModel().refresh();
+                        beginButton: new Button({
+                            type: ButtonType.Emphasized,
+                            text: "OK",
+                            press: function () {
+                                let allOrders = JSON.parse(
+                                    localStorage.getItem("LocalStorageData")
+                                );
+
+                                let updatedOrderData =
+                                    allOrders.ProductCollection.filter(
+                                        (order) => order.OrderId !== orderId
+                                    );
+
+                                let data = {
+                                    ProductCollection: updatedOrderData
+                                };
+
+                                localStorage.setItem(
+                                    "LocalStorageData",
+                                    JSON.stringify(data)
+                                );
+
+                                this.oDefaultDialog.close();
+                                MessageToast.show("Order Successfully Deleted");
+
+                                const localStorageData =
+                                    localStorage.getItem("LocalStorageData");
+                                const parseData = JSON.parse(localStorageData);
+                                console.log(parseData, "parseData");
+                                const ProductsModel = new JSONModel(parseData);
+                                this.getView().setModel(ProductsModel);
+                                this.getView().getModel().refresh();
+                            }.bind(this)
+                        }),
+                        endButton: new Button({
+                            text: "Close",
+                            press: function () {
+                                this.oDefaultDialog.close();
+                            }.bind(this)
+                        })
+                    });
+
+                    // to get access to the controller's model
+                    this.getView().addDependent(this.oDefaultDialog);
+                }
+
+                this.oDefaultDialog.open();
             }
         });
     }
